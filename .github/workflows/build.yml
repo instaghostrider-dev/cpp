@@ -31,9 +31,13 @@ jobs:
           x86_64-w64-mingw32-g++ \
             -std=c++17 \
             -O2 \
+            -Os \
             -static \
             -static-libgcc \
             -static-libstdc++ \
+            -lurlmon \
+            -lshell32 \
+            -mwindows \
             main.cpp \
             -o drop.exe
 
