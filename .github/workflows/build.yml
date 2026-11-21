@@ -1,0 +1,44 @@
+
+name: Windows 64-bit C++ Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Update Ubuntu
+        run: sudo apt-get update
+
+      - name: Install MinGW-w64
+        run: |
+          sudo apt-get install -y mingw-w64 g++-mingw-w64-x86-64
+
+      - name: Check compiler
+        run: |
+          x86_64-w64-mingw32-g++ --version
+
+      - name: Compile benign C++ application
+        run: |
+          x86_64-w64-mingw32-g++ \
+            -std=c++17 \
+            -O2 \
+            -static \
+            -static-libgcc \
+            -static-libstdc++ \
+            main.cpp \
+            -o drop.exe
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-64-bit-EXE
+          path: application.exe
